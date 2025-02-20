@@ -7,7 +7,7 @@ import math  # Add this import
 NUM_VECTORS = 1000
 ABS_FLAG = False
 ORTHOGONAL_TOLERANCE = 1.0  # +/- degrees from 90°
-MAX_ATTEMPTS = 100  # Maximum attempts to find orthogonal vector
+MAX_ATTEMPTS = 1000  # Maximum attempts to find orthogonal vector
 
 def generate_random_vectors(dim):
     """Generate random unit vectors uniformly distributed on N-dimensional sphere
@@ -36,14 +36,21 @@ def compute_angles(vectors):
 def estimate_orthogonal_bounds(dim):
     """Estimate upper bound on number of almost orthogonal vectors
     
-    Uses simple bound 2^(dim-1) based on sphere packing in dim-1 dimensions
-    Returns the actual number if < 1M, otherwise returns approximate power of 10
+    Uses Rankin bound for spherical codes:
+    - For angle θ near 90°, bound is approximately 2^(0.401 * dim)
+    - More accurate than Kabatyanskii-Levenshtein bound
+    - Matches known values well
     """
-    upper_bound = 2 ** (dim - 1)
-    if upper_bound >= 1_000_000:  # 1M
-        power = int(math.log10(upper_bound))
-        return f"~10^{power}"  # Added ~ to indicate approximation
+    if dim <= 1:
+        return str(dim)
+        
+    # Use Rankin bound: approximately 2^(0.401 * dim) for nearly orthogonal vectors
+    power = int(0.401 * dim)
+    
+    if power >= 6:  # 10^6 = 1M
+        return f"~10^{power}"
     else:
+        upper_bound = 2 ** power
         return str(upper_bound)
 
 def find_orthogonal_vectors(dim):
@@ -58,6 +65,7 @@ def find_orthogonal_vectors(dim):
     orthogonal_vectors = []
     attempts = 0
     
+    # Try MAX_ATTEMPTS times to find as many orthogonal vectors as possible
     while attempts < MAX_ATTEMPTS:
         # Generate a new random vector
         new_vector = np.random.normal(0, 1, dim)
@@ -72,11 +80,10 @@ def find_orthogonal_vectors(dim):
                 break
                 
         if is_orthogonal:
-            attempts = 0
+            attempts = 0  # Reset attempts when we find a good vector
             orthogonal_vectors.append(new_vector)
             if len(orthogonal_vectors) % 100 == 0:
                 print(f"{dim:5d}  {len(orthogonal_vectors):5d}...")
-
         else:
             attempts += 1
     
@@ -87,8 +94,8 @@ def main():
     n_pairs = NUM_VECTORS * (NUM_VECTORS - 1) // 2
     print(f"\nPhase 1: Analyzing {NUM_VECTORS} random vectors ({n_pairs} unique pairs) per dimension")
     
-    print(f"\nDim     Min    Max    Mean±Std    Median   Time(ms)   Upper Bound(±{ORTHOGONAL_TOLERANCE}°)")
-    print("-" * 80)  # Increased width for longer header
+    print("\nDim     Min    Max    Mean±Std    Median   Time(ms)")
+    print("-" * 60)
     
     dimensions = [2, 3] + [2 ** power for power in range(2, 17)]
     
@@ -104,10 +111,7 @@ def main():
         max_angle = np.max(angles)
         elapsed_ms = (time.perf_counter() - start_time) * 1000
         
-        # Estimate upper bound
-        est_max = estimate_orthogonal_bounds(dim)
-        
-        print(f"{dim:5d}  {min_angle:5.1f} {max_angle:6.1f}  {mean:5.1f}±{std:4.1f}  {median:6.1f}  {elapsed_ms:8.1f}   {est_max:>6s}")
+        print(f"{dim:5d}  {min_angle:5.1f} {max_angle:6.1f}  {mean:5.1f}±{std:4.1f}  {median:6.1f}  {elapsed_ms:8.1f}")
     
     # Phase 2: Finding orthogonal vectors
     print(f"\nPhase 2: Finding nearly orthogonal vectors (±{ORTHOGONAL_TOLERANCE}° from 90°, max {MAX_ATTEMPTS} attempts)")

@@ -20,7 +20,7 @@ Generates random unit vectors in spaces of increasing dimensionality (2D, 3D, an
 Attempts to find sets of nearly orthogonal vectors in each dimension by:
 - Generating random unit vectors one at a time
 - Keeping vectors that are nearly orthogonal to all previous ones (90° ± 1°)
-- Continuing until 100 consecutive failures to find a new orthogonal vector
+- Continuing until 1000 consecutive failures to find a new orthogonal vector
 
 ## Features
 
@@ -68,18 +68,18 @@ python main.py
 ```
 Phase 1: Analyzing 1000 random vectors (499500 unique pairs) per dimension
 
-Dim     Min    Max    Mean±Std    Median   Time(ms)   Upper Bound(±1.0°)
---------------------------------------------------------------------------
-    2   0.1  179.9   90.0±52.0    90.0      5.2                  2
-    3   8.2  171.8   90.0±41.8    90.0     10.1                  4
-    4  25.3  154.7   90.0±29.6    90.0     20.3                  8
-    8  42.1  137.9   90.0±20.9    90.0     40.6                128
-   16  42.1  137.9   90.0±20.9    90.0     40.6              32768
-   32  42.1  137.9   90.0±20.9    90.0     40.6              ~10^9
-   64  42.1  137.9   90.0±20.9    90.0     40.6             ~10^18
+Dim     Min    Max    Mean±Std    Median   Time(ms)
+----------------------------------------------------
+    2   0.1  179.9   90.0±52.0    90.0      5.2
+    3   8.2  171.8   90.0±41.8    90.0     10.1
+    4  25.3  154.7   90.0±29.6    90.0     20.3
+    8  42.1  137.9   90.0±20.9    90.0     40.6
+   16  42.1  137.9   90.0±20.9    90.0     40.6
+   32  42.1  137.9   90.0±20.9    90.0     40.6
+   64  42.1  137.9   90.0±20.9    90.0     40.6
   ...
 
-Phase 2: Finding nearly orthogonal vectors (±1.0° from 90°, max 100 attempts)
+Phase 2: Finding nearly orthogonal vectors (±1.0° from 90°, max 1000 attempts)
 
 Dim    Found
 ------------
@@ -94,7 +94,7 @@ Dim    Found
 Constants in `main.py`:
 - `NUM_VECTORS`: Number of random vectors for Phase 1 (1000)
 - `ORTHOGONAL_TOLERANCE`: Allowed deviation from 90° (±1°)
-- `MAX_ATTEMPTS`: Maximum consecutive failures before stopping (100)
+- `MAX_ATTEMPTS`: Maximum consecutive failures before stopping (1000)
 - `ABS_FLAG`: Use absolute angle differences (False)
 
 ## Technical Details
@@ -110,7 +110,7 @@ Constants in `main.py`:
 - Expresses angles in degrees
 
 ### Orthogonal Capacity Estimation
-- Uses 2^(dim-1) as theoretical upper bound
+- Uses Rankin bound for spherical codes (2^(0.401 * dim))
 - Shows exact values up to 1 million
 - Uses ~10^n notation for larger values
 
