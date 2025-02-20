@@ -1,43 +1,55 @@
-# Vector Angle Distribution Analysis
+# Orthogonal Capacity
 
-This program analyzes the angular relationships between random unit vectors in high-dimensional spaces. It provides insights into how angles between vectors behave as dimensionality increases, which is particularly relevant for high-dimensional geometry and machine learning applications.
+This program explores the geometric properties of high-dimensional spaces by:
+1. Analyzing angular relationships between random unit vectors
+2. Finding sets of nearly orthogonal vectors
+3. Estimating theoretical bounds on orthogonal capacity
 
 ## Overview
 
-The program generates random unit vectors in spaces of increasing dimensionality (from 2¹ to 2¹⁶) and computes statistical properties of the angles between all possible vector pairs. Each dimension is analyzed using 1000 random vectors, resulting in 499,500 unique pair comparisons.
+The program operates in two phases:
+
+### Phase 1: Random Vector Analysis
+Generates random unit vectors in spaces of increasing dimensionality (2D, 3D, and powers of 2 up to 2¹⁶) and analyzes their angular relationships. For each dimension:
+- Generates 100 random unit vectors using Gaussian distribution
+- Computes angles between all pairs (4,950 unique pairs)
+- Provides statistical analysis of the angles
+- Estimates theoretical maximum number of orthogonal vectors
+
+### Phase 2: Orthogonal Vector Finding
+Attempts to find sets of nearly orthogonal vectors in each dimension by:
+- Generating random unit vectors one at a time
+- Keeping vectors that are nearly orthogonal to all previous ones (90° ± 2°)
+- Continuing until 3 consecutive failures to find a new orthogonal vector
 
 ## Features
 
 - Phase 1: Random Vector Analysis
-  - Generates 1000 random unit vectors using Gaussian distribution
-  - Analyzes dimensions in powers of 2 from 2¹ to 2¹⁶ (2 to 65,536)
-  - Supports 2D, 3D, and higher dimensional vector spaces
-  - Computes angles between all possible vector pairs
-  - Provides comprehensive statistical analysis including:
-    - Mean angle
-    - Standard deviation
-    - Median angle
-    - Minimum and maximum angles
-  - Performance timing for each dimensional analysis
+  - Uniform sampling on N-dimensional unit sphere
+  - Comprehensive angle statistics (min, max, mean, std, median)
+  - Performance timing for each dimension
+  - Theoretical bounds on orthogonal capacity:
+    - Exact values for small dimensions
+    - Approximate (10^n) for large dimensions
 
 - Phase 2: Orthogonal Vector Finding
-  - Attempts to find sets of orthogonal vectors in each dimension
-  - Considers vectors orthogonal if their angle is 90° ± 1°
-  - For dimension N, tries to find N+1 orthogonal vectors
-  - Reports number of vectors found and attempts made
+  - Incremental orthogonal set construction
+  - Configurable orthogonality tolerance
+  - Adaptive stopping criterion
+  - Progress reporting for large sets
 
 ## Requirements
 
 - Python 3.x
 - NumPy
-- Python standard library (itertools, time)
+- Python standard library (itertools, time, math)
 
 ## Installation
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/vector-angle-analysis.git
-cd vector-angle-analysis
+git clone https://github.com/yourusername/orthogonal-capacity.git
+cd orthogonal-capacity
 ```
 
 2. Install required dependencies:
@@ -51,16 +63,6 @@ Run the program using:
 ```bash
 python main.py
 ```
-
-The program will output a table showing the statistical analysis for each dimension, including:
-- Dimension size (5 characters, right-aligned)
-- Minimum angle (5 characters)
-- Maximum angle (6 characters)
-- Mean ± Standard deviation (10 characters total)
-- Median angle (6 characters)
-- Execution time in milliseconds (8 characters)
-
-All angle values are displayed with one decimal place precision.
 
 ### Example Output
 ```
@@ -77,7 +79,7 @@ Dim     Min    Max    Mean±Std    Median   Time(ms)   Est.Max
    64  42.1  137.9   90.0±20.9    90.0     40.6     ~10^18
   ...
 
-Phase 2: Finding nearly orthogonal vectors (±1.0° from 90°, max 10000 attempts)
+Phase 2: Finding nearly orthogonal vectors (±2.0° from 90°, max 3 attempts)
 
 Dim    Count
 ------------
@@ -89,33 +91,28 @@ Dim    Count
 
 ## Configuration
 
-You can modify the following constants in `main.py`:
-
-- `NUM_VECTORS`: Number of random vectors to generate (fixed at 1000)
-- `ABS_FLAG`: When True, considers only acute angles (0° to 90°); when False, considers full angle range (0° to 180°)
+Constants in `main.py`:
+- `NUM_VECTORS`: Number of random vectors for Phase 1 (100)
+- `ORTHOGONAL_TOLERANCE`: Allowed deviation from 90° (±2°)
+- `MAX_ATTEMPTS`: Maximum consecutive failures before stopping (3)
+- `ABS_FLAG`: Use absolute angle differences (False)
 
 ## Technical Details
 
 ### Vector Generation
-- Vectors are initially generated using normal distribution (Gaussian)
-- Each vector is normalized to unit length
-- Vectors are generated independently for each dimension
+- Uses Gaussian distribution for uniform sampling on unit sphere
+- Normalizes vectors to unit length
+- Generates vectors independently for each dimension
 
 ### Angle Computation
-- Uses arccos of dot product for angle calculation
-- Dot products are clipped to [-1.0, 1.0] to prevent numerical errors
-- Angles are expressed in degrees
+- Uses arccos of dot product
+- Clips dot products to [-1.0, 1.0] for numerical stability
+- Expresses angles in degrees
 
-### Mathematical Constraints
-- All vectors must be unit vectors (length = 1)
-- Dot products must be constrained to [-1, 1]
-- Angles are converted from radians to degrees for display
-
-## Error Handling
-
-The program implements the following error handling measures:
-- Numerical precision issues in dot product calculations
-- Prevention of invalid angle calculations through dot product clipping
+### Orthogonal Capacity Estimation
+- Uses 2^(dim-1) as theoretical upper bound
+- Shows exact values up to 1 million
+- Uses ~10^n notation for larger values
 
 ## License
 
