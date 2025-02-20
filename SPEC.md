@@ -9,7 +9,7 @@ This program analyzes the angular relationships between random unit vectors in h
 - `NUM_VECTORS`: Number of random vectors to generate (fixed at 1000)
 - `ABS_FLAG`: Boolean flag determining angle interpretation (fixed at False)
 - `ORTHOGONAL_TOLERANCE`: Allowed deviation from 90° (fixed at ±1°)
-- `MAX_ATTEMPTS`: Maximum attempts to find orthogonal vectors (fixed at 10000)
+- `MAX_ATTEMPTS`: Maximum attempts to find orthogonal vectors (fixed at 100)
 - Dimensions analyzed: 
   - Powers of 2 from 2¹ to 2¹⁶ (2 to 65536)
   - Special focus on 2D, 3D, and higher dimensions
@@ -63,7 +63,7 @@ For each dimension, the system shall compute:
 ### 4.1 Phase 1 Display Format
 The system shall display:
 - The number of random vectors used for each dimension size
-- A header row with column labels
+- A header row with column labels including orthogonal tolerance for estimates
 - One row per dimension containing:
   - Dimension size (5 characters, right-aligned)
   - Minimum angle (5 characters)
@@ -78,7 +78,7 @@ The system shall display:
 ### 4.2 Phase 2 Display Format
 The system shall display:
 - A header indicating Phase 2, the orthogonal tolerance, and maximum attempts
-- Column headers for dimension and count
+- Column headers for dimension and found count
 - One row per dimension containing:
   - Dimension size (5 characters, right-aligned)
   - Number of orthogonal vectors found (5 characters)
