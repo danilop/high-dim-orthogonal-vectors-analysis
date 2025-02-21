@@ -13,7 +13,6 @@ Generates random unit vectors in spaces of increasing dimensionality (2D, 3D, an
 - Generates 1000 random unit vectors using Gaussian distribution
 - Computes angles between all pairs (499,500 unique pairs)
 - Provides statistical analysis of the angles
-- Estimates theoretical maximum number of orthogonal vectors
 
 ### Phase 2: Orthogonal Vector Finding
 Attempts to find sets of nearly orthogonal vectors in each dimension by:
