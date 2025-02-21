@@ -1,7 +1,7 @@
 [project]
-name = "superposition"
+name = "high-dim-orthogonal-vectors-analysis"
 version = "0.1.0"
-description = "Add your description here"
+description = "High dimemnsional orthogonal vectors analysis"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
