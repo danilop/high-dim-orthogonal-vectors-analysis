@@ -1,4 +1,4 @@
-# Orthogonal Capacity
+# High Dimensional Orthogonal Vectors Analysis
 
 This program explores the geometric properties of high-dimensional spaces by:
 1. Analyzing angular relationships between random unit vectors
@@ -14,11 +14,17 @@ Generates random unit vectors in spaces of increasing dimensionality (2D, 3D, an
 - Computes angles between all pairs (499,500 unique pairs)
 - Provides statistical analysis of the angles
 
+The result is that for higher dimensions, most random vectors are almost (for example, within 1 degree of tolerance) orthogonal between each other.
+
+Because vectors are used as machine learning embeddings, and cross product is often used to compare the similarity of vector embeddings, this result shows that higher dimensions provide exponentially more expressiveness for the concepts linked to those embeddings.
+
 ### Phase 2: Orthogonal Vector Finding
 Attempts to find sets of nearly orthogonal vectors in each dimension by:
 - Generating random unit vectors one at a time
 - Keeping vectors that are nearly orthogonal to all previous ones (90° ± 1°)
 - Continuing until 1000 consecutive failures to find a new orthogonal vector
+
+The result follows from phase 1 and shows that finding othrogonal vectors at random becomes extremly common as the number of dimensions grows. The growth is not linear bu exponential.
 
 ## Features
 
