@@ -18,6 +18,8 @@ The result is that for higher dimensions, most random vectors are almost (for ex
 
 Because vectors are used as machine learning embeddings, and cross product is often used to compare the similarity of vector embeddings, this result shows that higher dimensions provide exponentially more expressiveness for the concepts linked to those embeddings.
 
+It seems like the curse of dimensionality that negatively affects many algorithms that use vector distances can, for vector embeddings, be of help by providing more space for meanings.
+
 ### Phase 2: Orthogonal Vector Finding
 Attempts to find sets of nearly orthogonal vectors in each dimension by:
 - Generating random unit vectors one at a time
