@@ -1,7 +1,7 @@
 [project]
 name = "high-dim-orthogonal-vectors-analysis"
 version = "0.1.0"
-description = "High dimemnsional orthogonal vectors analysis"
+description = "High Dimensional Orthogonal Vectors Analysis"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
