@@ -3,7 +3,6 @@
 This program explores the geometric properties of high-dimensional spaces by:
 1. Analyzing angular relationships between random unit vectors
 2. Finding sets of nearly orthogonal vectors
-3. Estimating theoretical bounds on orthogonal capacity
 
 ## Overview
 
